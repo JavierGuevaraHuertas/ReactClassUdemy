@@ -1,45 +1,63 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/UserProvider";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { erroresFirebase } from "../utils/erroresFirebase";
+import FormError from "../components/FormError";
+import FormInput from "../components/FormInput";
+import { formValidate } from "../utils/formValidate";
 
 const Login = () => {
 
-    const [email, setEmail] = useState("test@test.com");
-    const [password, setPassword] = useState("123123");
-
     const {loginUser} = useContext(UserContext);
     const navegate = useNavigate();
+    const {required, patternEmail, minLength, validateTrim} = formValidate();
 
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-        console.log("procesando form:", email, password);
+    const {register, 
+        handleSubmit, 
+        formState: {errors}, 
+        getValues, 
+        setError
+        } = useForm();
+
+    const onSubmit = async({email, password}) => {
         try{
-            await loginUser(email, password);
-            console.log("Usuario logueado");
-            navegate("/");
+             await loginUser(email, password);
+              navegate("/");
         }catch(error){
-            console.log(error.code);
-        }
+              console.log(error.code);
+              setError("firebase", {
+               message: erroresFirebase(error.code),
+             });                    
+            }
     };
 
     return (
-        <>
-            
+        <>            
             <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-            <input type="email" 
-            placeholder="Ingrese Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            />
-            <input type="password" 
-            placeholder="Ingrese Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            />
+            <FormError error={errors.firebase}/>
+            <form onSubmit={handleSubmit(onSubmit)}>
+            <FormInput
+                type="email" 
+                placeholder="Ingrese Email"
+                {...register("email", {
+                    required,
+                 pattern: patternEmail,
+                })}
+            ></FormInput>
+            <FormError error={errors.email}/>
+            <FormInput 
+                type="password" 
+                placeholder="Ingrese Password"
+                {...register("password", {
+                    minLength,
+                  validate: validateTrim,                   
+                })}
+                >
+            </FormInput>
+            <FormError error={errors.password}/>                
             <button type="submit">Login</button>
-            </form>
-            
+            </form>            
         </>
     );
 };
