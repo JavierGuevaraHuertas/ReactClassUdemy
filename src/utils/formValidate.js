@@ -20,10 +20,9 @@ export const formValidate = (getValues) => {
                 return true;
         },  
         },
-        validateEquals(getValues) {
-            return {equals: (v) => 
-            v === getValues("password") || 
-            "No coincide las contraseñas",
+        validateEquals(value) {
+            return {
+                equals: (v) => v === value || "No coincide las contraseñas",
             }
         },                              
     }

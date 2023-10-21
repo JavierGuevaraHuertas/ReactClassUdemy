@@ -1,6 +1,14 @@
 const FormError = ({error}) => { 
     return <>
-    {error && <p>{error.message}</p>}</> 
+    {error && (
+        <p
+        id="outlined_error_help"
+        className="mt-2 text-xs text-red-600 dark:text-red-400"
+      >
+        <span className="font-medium">Oh, snapp!</span>
+        {error.message}
+      </p>
+    )}</> 
 };
 
 export default FormError;
