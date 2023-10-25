@@ -5,7 +5,7 @@ const FormError = ({error}) => {
         id="outlined_error_help"
         className="mt-2 text-xs text-red-600 dark:text-red-400"
       >
-        <span className="font-medium">Oh, snapp!</span>
+        <span className="font-medium"></span>
         {error.message}
       </p>
     )}</> 
