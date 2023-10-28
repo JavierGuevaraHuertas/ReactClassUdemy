@@ -9,6 +9,8 @@ import { UserContext } from "./context/UserProvider";
 import LayoutContainerForm from "./components/layouts/LayoutContainerForm";
 import Perfil from "./routes/Perfil";
 import NotFound from "./routes/NotFound";
+import LayoutRedirect from "./components/layouts/LayoutRedirect";
+
 
 
 const App = () => {
@@ -23,7 +25,7 @@ const App = () => {
     <>
     <Navbar />
     <Routes>
-        <Route path="*" element={<NotFound/>}/>
+        
         <Route path="/"
           element={
           <LayoutRequiereAuth/>
@@ -42,7 +44,9 @@ const App = () => {
           element={<Register />}
         />
           </Route> 
-             
+        <Route path="/:nanoid" element={<LayoutRedirect />}>
+          <Route index element={<NotFound/>} />
+          </Route>  
         
     </Routes>
     </>
